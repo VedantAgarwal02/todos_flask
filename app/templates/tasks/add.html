@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Add Task</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <main class="container small">
+      <header class="header">
+        <h1>Add Task</h1>
+        <a class="btn ghost" href="{{ url_for('tasks.index') }}">Back</a>
+      </header>
+
+      {% if error %}
+      <p class="error">{{ error }}</p>
+      {% endif %}
+
+      <form method="post" class="form">
+        <label>Title</label>
+        <input type="text" name="title" value="{{ title or '' }}" required />
+        <label>Description</label>
+        <textarea name="description">{{ description or '' }}</textarea>
+        <div class="form-actions">
+          <button
+            class="btn ghost"
+            type="button"
+            onclick="location.href='{{ url_for('tasks.index') }}'"
+          >
+            Cancel
+          </button>
+          <button class="btn" type="submit">Add</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

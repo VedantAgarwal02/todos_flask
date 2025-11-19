@@ -1,0 +1,64 @@
+{% extends "layout.html" %} {% block content %}
+<!-- <h1>My Tasks</h1>
+<a class="btn" href="{{ url_for('tasks.add_task') }}">Add</a> -->
+<header class="header">
+  <h1>My Tasks</h1>
+  <a class="btn" href="{{ url_for('tasks.add_task') }}">+ Add Task</a>
+</header>
+{% if tasks|length == 0 %}
+<p class="muted">No tasks yet. Add one to get started.</p>
+{% endif %}
+<ul class="tasks">
+  {% for t in tasks %}
+  <li class="task {{ 'done' if t.done }}">
+    <h3>{{ t.title }}</h3>
+    {% if t.description %}
+    <p class="desc">{{ t.description }}</p>
+    {% endif %}
+    <div class="meta">{{ t.created_at.strftime('%b %d, %Y %H:%M') }}</div>
+    <form method="post" action="{{ url_for('tasks.delete_task', id=t.id) }}">
+      <button class="link-btn">Delete</button>
+    </form>
+    <button
+      class="edit-btn link-btn"
+      data-id="{{ t.id }}"
+      data-title="{{ t.title|e }}"
+      data-desc="{{ (t.description or '')|e }}"
+      data-done="{{ '1' if t.done else '0' }}"
+    >
+      Edit
+    </button>
+  </li>
+  {% endfor %}
+</ul>
+
+<!-- Edit Modal (keeps only two templates) -->
+<div id="editModal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <h2>Edit Task</h2>
+    <form id="editForm" method="post" action="">
+      <label>Title</label>
+      <input type="text" name="title" id="editTitle" required />
+      <br />
+      <label>Description</label>
+      <input
+        type="text"
+        name="description"
+        id="editDescription"
+        required
+        style="margin-top: 15px"
+      />
+      <br />
+      <label class="inline"
+        ><input type="checkbox" name="done" id="editDone" /> Done</label
+      >
+      <br />
+      <div class="modal-actions">
+        <!-- <button type="button" class="btn ghost" onclick="closeEdit()">Cancel</button> -->
+        <button type="button" class="btn ghost" id="editCancel">Cancel</button>
+        <button type="submit" class="btn">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
